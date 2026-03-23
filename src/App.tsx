@@ -97,7 +97,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F2EE] font-sans text-[#000000e6]">
+    <div className="min-h-screen bg-[#F4F2EE] font-sans text-[#000000e6] flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white border-b border-[#e0e0e0] px-4 py-2 shadow-sm">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -130,7 +130,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <main className="max-w-5xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-grow">
         {/* Left Column: Input & Controls */}
         <div className="lg:col-span-7 space-y-6">
           <section className="bg-white rounded-xl border border-[#e0e0e0] shadow-sm overflow-hidden">
@@ -247,9 +247,20 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="max-w-5xl mx-auto px-4 py-12 text-center text-[#666666] text-sm">
+      <footer className="w-full max-w-5xl mx-auto px-4 py-8 text-center text-[#666666] text-sm border-t border-[#e0e0e0] mt-auto">
         <p>© 2026 LinkedIn Speak Translator. Built with Gemini AI.</p>
-        <div className="mt-2 flex justify-center gap-4">
+        <div className="mt-4 flex flex-col items-center gap-2">
+          <a 
+            href="https://www.linkedin.com/in/jan-har%C3%A1k/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:text-[#0A66C2] transition-colors font-medium"
+          >
+            <Linkedin className="w-4 h-4" />
+            <span>Jan Harák</span>
+          </a>
+        </div>
+        <div className="mt-4 flex justify-center gap-4 opacity-60">
           <a href="#" className="hover:text-[#0A66C2] transition-colors">Privacy</a>
           <a href="#" className="hover:text-[#0A66C2] transition-colors">Terms</a>
           <a href="#" className="hover:text-[#0A66C2] transition-colors">Support</a>
