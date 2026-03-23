@@ -28,11 +28,11 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const MODELS = [
-  { id: 'gemini-3.1-flash-lite-preview', name: 'Gemini 3.1 Flash Lite', description: 'Lightweight and efficient', disabled: true },
-  { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash (Fast)', description: 'Best for quick translations', disabled: true },
-  { id: 'gemini-3.1-pro-preview', name: 'Gemini 3.1 Pro (Smart)', description: 'Best for complex reasoning and nuance', disabled: true },
+  { id: 'gemini-3.1-flash-lite-preview', name: 'Gemini 3.1 Flash Lite', description: 'Lightweight and efficient', disabled: false },
+  { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash (Fast)', description: 'Best for quick translations', disabled: false },
+  { id: 'gemini-3.1-pro-preview', name: 'Gemini 3.1 Pro (Smart)', description: 'Best for complex reasoning and nuance', disabled: false },
   { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', description: 'Reliable previous generation model', disabled: false },
-  { id: 'gemini-flash-latest', name: 'Gemini Flash (Stable)', description: 'Stable version of the Flash model', disabled: true },
+  { id: 'gemini-flash-latest', name: 'Gemini Flash (Stable)', description: 'Stable version of the Flash model', disabled: false },
 ];
 
 const TONES = [
@@ -48,6 +48,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
   const [selectedTone, setSelectedTone] = useState(TONES[0].id);
+  const [customApiKey, setCustomApiKey] = useState('');
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,7 +59,16 @@ export default function App() {
     setError(null);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const isCustomModel = selectedModel !== 'gemini-2.5-flash';
+      const apiKey = isCustomModel ? (customApiKey || process.env.GEMINI_API_KEY) : process.env.GEMINI_API_KEY;
+      
+      if (isCustomModel && !customApiKey) {
+        setError('Pro tento model je vyžadován váš vlastní API klíč.');
+        setIsLoading(false);
+        return;
+      }
+
+      const ai = new GoogleGenAI({ apiKey: apiKey as string });
       const tone = TONES.find(t => t.id === selectedTone);
       
       const systemInstruction = `You are an expert LinkedIn content strategist. 
@@ -118,7 +128,7 @@ export default function App() {
                   className="bg-transparent border-none focus:ring-0 cursor-pointer hover:text-[#0A66C2] transition-colors font-bold"
                 >
                   {MODELS.map(m => (
-                    <option key={m.id} value={m.id} disabled={m.disabled}>{m.name}{m.disabled ? ' (Inactive)' : ''}</option>
+                    <option key={m.id} value={m.id} disabled={m.disabled}>{m.name}</option>
                   ))}
                 </select>
               </div>
@@ -133,6 +143,34 @@ export default function App() {
       <main className="max-w-5xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-grow">
         {/* Left Column: Input & Controls */}
         <div className="lg:col-span-7 space-y-6">
+          <AnimatePresence>
+            {selectedModel !== 'gemini-2.5-flash' && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="bg-white rounded-xl border-2 border-[#0A66C2] p-4 shadow-md mb-4">
+                  <label className="block text-sm font-bold text-[#0A66C2] mb-2 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    Vložte svůj API klíč pro {MODELS.find(m => m.id === selectedModel)?.name}
+                  </label>
+                  <input
+                    type="password"
+                    value={customApiKey}
+                    onChange={(e) => setCustomApiKey(e.target.value)}
+                    placeholder="AI_Studio_API_Key..."
+                    className="w-full px-3 py-2 border border-[#e0e0e0] rounded-lg focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent outline-none transition-all"
+                  />
+                  <p className="mt-2 text-[10px] text-[#666666]">
+                    Tento klíč bude použit pouze pro aktuální sezení a nebude nikam ukládán.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <section className="bg-white rounded-xl border border-[#e0e0e0] shadow-sm overflow-hidden">
             <div className="p-4 border-b border-[#f0f0f0] flex items-center justify-between">
               <h2 className="font-semibold text-lg flex items-center gap-2">
