@@ -31,7 +31,7 @@ const MODELS = [
   { id: 'gemini-3.1-flash-lite-preview', name: 'Gemini 3.1 Flash Lite', description: 'Lightweight and efficient', disabled: true },
   { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash (Fast)', description: 'Best for quick translations', disabled: true },
   { id: 'gemini-3.1-pro-preview', name: 'Gemini 3.1 Pro (Smart)', description: 'Best for complex reasoning and nuance', disabled: true },
-  { id: 'gemini-2.5-flash-preview-12-2025', name: 'Gemini 2.5 Flash', description: 'Reliable previous generation model', disabled: false },
+  { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', description: 'Reliable previous generation model', disabled: false },
   { id: 'gemini-flash-latest', name: 'Gemini Flash (Stable)', description: 'Stable version of the Flash model', disabled: true },
 ];
 
@@ -46,7 +46,7 @@ export default function App() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash-preview-12-2025');
+  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
   const [selectedTone, setSelectedTone] = useState(TONES[0].id);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
